@@ -4,6 +4,7 @@ import "./styles.scss";
 
 const UploadEditor = () => {
   const [file, setFile] = useState(null);
+  const [error, setError] = useState("");
   const [filters, setFilters] = useState({
     blur: 0,
     saturation: 100,
@@ -11,11 +12,21 @@ const UploadEditor = () => {
     contrast: 100,
     sepia: 0,
   });
-  
+
   const canvasRef = useRef(null);
 
-  const handleUpload = (acceptedFiles) => {
-    console.log("logging drop/selected file", acceptedFiles);
+  const handleUpload = (acceptedFiles, rejectedFiles) => {
+    setError("");
+
+    // alidate image format
+    const validImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/tiff', 'image/bmp'];
+    const invalidFiles = acceptedFiles.filter(file => !validImageTypes.includes(file.type));
+    
+    if (invalidFiles.length > 0 || rejectedFiles.length > 0) {
+      setError("Unsupported file format. Please upload an image.");
+      return;
+    }
+
     setFile(acceptedFiles[0]);
   };
 
@@ -48,15 +59,15 @@ const UploadEditor = () => {
       `;
 
       ctx.drawImage(image, 0, 0);
-      
-      const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
+
+      const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/jpg"));
 
       const handle = await window.showSaveFilePicker({
-        suggestedName: "edited-image.png",
+        suggestedName: "edited-image.jpg",
         types: [
           {
-            description: "PNG files",
-            accept: { "image/png": [".png"] },
+            description: "JPG files",
+            accept: { "image/jpg": [".jpg"] },
           },
         ],
       });
@@ -69,27 +80,32 @@ const UploadEditor = () => {
 
   return (
     <div className="master">
-      <Dropzone onDrop={handleUpload} accept="image/*" minSize={1024} maxSize={3072000}>
-        {({ getRootProps, getInputProps, isDragAccept, isDragReject }) => {
+      <Dropzone
+        onDrop={handleUpload}
+        accept=".jpg,.jpeg,.png,.gif,.tiff,.bmp"
+        minSize={1024}
+        maxSize={3072000}
+      >
+        {({ getRootProps, getInputProps, isDragAccept, isDragReject, isDragActive }) => {
           const additionalClass = isDragAccept ? "accept" : isDragReject ? "reject" : "";
 
           return (
             <div className="dropfield">
               <div className="header">
                 <h1>Upload Image</h1>
-                <p>Available formats: jpg, png, tiff...</p>
+                <p>Available formats: jpg, jpeg, png, gif, tiff, bmp...</p>
               </div>
 
               <h2>Drag & Drop</h2>
               <div
                 {...getRootProps({
-                  className: `dropzone ${additionalClass}`,
-                })}
-              >
+                  className: `dropzone ${additionalClass} ${isDragActive ? "highlight" : ""}`,
+                  })}
+                  >
                 <input {...getInputProps()} />
-                <div className="upload-area">Drop Files Here...</div>
+                <p>Drop Files Here...</p>
               </div>
-              <p>Some example message maybe a credit to the Author</p>
+              {error && <p className="error">{error}</p>}
             </div>
           );
         }}
@@ -99,8 +115,8 @@ const UploadEditor = () => {
           <div className="editor-section">
             <div className="editor-display">
               <div className="info">
-                <h4>File Uploaded Successfully</h4>
-                <p>Edit your photo using controls on the right side</p>
+                <h4>File Uploaded Successfully!</h4>
+                <p>Edit your photo using controls below.</p>
               </div>
               <img
                 src={URL.createObjectURL(file)}
@@ -118,66 +134,64 @@ const UploadEditor = () => {
               />
               <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
             </div>
-            <div>
-              <div className="slider-container">
-                {/* BLUR */}
-                <label htmlFor="blur-slider">Blur Amount: {filters.blur}px</label>
-                <input
-                  type="range"
-                  id="blur-slider"
-                  name="blur"
-                  min="0"
-                  max="20"
-                  value={filters.blur}
-                  onChange={handleSliderChange}
-                />
-                {/* SATURATION */}
-                <label htmlFor="saturation-slider">Saturation Amount: {filters.saturation}%</label>
-                <input
-                  type="range"
-                  id="saturation-slider"
-                  name="saturation"
-                  min="0"
-                  max="200"
-                  value={filters.saturation}
-                  onChange={handleSliderChange}
-                />
-                {/* BRIGHTNESS */}
-                <label htmlFor="brightness-slider">Brightness Amount: {filters.brightness}%</label>
-                <input
-                  type="range"
-                  id="brightness-slider"
-                  name="brightness"
-                  min="0"
-                  max="200"
-                  value={filters.brightness}
-                  onChange={handleSliderChange}
-                />
-                {/* CONTRAST */}
-                <label htmlFor="contrast-slider">Contrast Amount: {filters.contrast}%</label>
-                <input
-                  type="range"
-                  id="contrast-slider"
-                  name="contrast"
-                  min="0"
-                  max="200"
-                  value={filters.contrast}
-                  onChange={handleSliderChange}
-                />
-                {/* SEPIA */}
-                <label htmlFor="sepia-slider">Sepia Amount: {filters.sepia}%</label>
-                <input
-                  type="range"
-                  id="sepia-slider"
-                  name="sepia"
-                  min="0"
-                  max="100"
-                  value={filters.sepia}
-                  onChange={handleSliderChange}
-                />
-              </div>
-              <button onClick={handleDownload}>Download Edited Image</button>
+            <div className="slider-container">
+              {/* BLUR */}
+              <label htmlFor="blur-slider"><p>Blur:</p> {filters.blur}px</label>
+              <input
+                type="range"
+                id="blur-slider"
+                name="blur"
+                min="0"
+                max="20"
+                value={filters.blur}
+                onChange={handleSliderChange}
+              />
+              {/* SATURATION */}
+              <label htmlFor="saturation-slider"><p>Saturation:</p> {filters.saturation}%</label>
+              <input
+                type="range"
+                id="saturation-slider"
+                name="saturation"
+                min="0"
+                max="200"
+                value={filters.saturation}
+                onChange={handleSliderChange}
+              />
+              {/* BRIGHTNESS */}
+              <label htmlFor="brightness-slider"><p>Brigthness:</p> {filters.brightness}%</label>
+              <input
+                type="range"
+                id="brightness-slider"
+                name="brightness"
+                min="0"
+                max="200"
+                value={filters.brightness}
+                onChange={handleSliderChange}
+              />
+              {/* CONTRAST */}
+              <label htmlFor="contrast-slider"><p>Contrast:</p> {filters.contrast}%</label>
+              <input
+                type="range"
+                id="contrast-slider"
+                name="contrast"
+                min="0"
+                max="200"
+                value={filters.contrast}
+                onChange={handleSliderChange}
+              />
+              {/* SEPIA */}
+              <label htmlFor="sepia-slider"><p>Sepia:</p> {filters.sepia}%</label>
+              <input
+                type="range"
+                id="sepia-slider"
+                name="sepia"
+                min="0"
+                max="100"
+                value={filters.sepia}
+                onChange={handleSliderChange}
+              />
             </div>
+            <button className="download-btn" onClick={handleDownload}>Download</button>
           </div>
         </>
       )}

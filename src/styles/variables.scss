@@ -1,5 +1,6 @@
 // Colors
 $grey-100: #f8f9fa;
+$grey-150: #fcfbfb;
 $grey-200: #e9ecef;
 $grey-300: #dee2e6;
 $grey-400: #ced4da;
@@ -8,8 +9,10 @@ $grey-600: #6c757d;
 $grey-700: #495057;
 
 $primary: #007bff;
+$primary-hover: #0055aa;
 $primary-light: #66b2ff;
 $primary-dark: #0056b3;
+
 
 $secondary: #6c757d;
 $secondary-light: #a9b2bd;
@@ -29,6 +32,8 @@ $spacing-7: $spacing-unit * 5;   // 40px
 // Font sizes
 $font-size-base: 16px;
 
+$font-size-xs: $font-size-base * 0.75;   // 12px
+$font-size-sm: $font-size-base * 0.875;  // 14px
 $font-size-sm: $font-size-base * 0.875;  // 14px
 $font-size-md: $font-size-base;          // 16px
 $font-size-lg: $font-size-base * 1.25;   // 20px

@@ -1,0 +1,195 @@
+@import "../styles/variables.scss";
+
+.master {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+  
+    .dropfield {
+      width: 100%;
+      max-width: 600px;
+      margin: 20px 0;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background-color: $grey-100;
+      color: $grey-700;
+  
+      .header {
+        margin-bottom: 20px;
+        h1 {
+            font-size: $font-size-xl;
+            margin-bottom: $spacing-1;
+        }
+        p {
+            color: $grey-500;
+            font-size: $font-size-sm;
+        }
+      }
+      
+      h2 {
+        margin-top: $spacing-6;
+        color: $grey-700;
+        font-size: $font-size-sm;
+        margin-bottom: $spacing-2;
+      }
+      .dropzone {
+        border: 2px dashed #ccc;
+        border-radius: 10px;
+        padding: 40px;
+        text-align: center;
+        transition: all 0.3s ease;
+        color: $grey-500;
+        background-color: $grey-150;
+        &.accept {
+            border-color: $primary;
+            background-color: $grey-100;
+            color: $primary-dark;
+        }
+  
+        &.reject {
+          border-color: red;
+          background-color: rgba(255, 0, 0, 0.1);
+        }
+        &:hover {
+            border-color: $primary;
+            background-color: $grey-100;
+            cursor: pointer;
+            color: $primary-dark;
+        }
+        p {
+            font-size: $font-size-xs;
+            font-weight: 500;
+        }
+      }
+  
+      .upload-area {
+        font-size: 16px;
+        color: #888;
+        &:hover {
+            color: $primary;
+        }
+      }
+
+      .error {
+        text-align: center;
+        font-size: $font-size-xs;
+        font-weight: 500;
+        margin-top: $spacing-3;
+        color: red;
+      }
+    }
+  
+    .editor-section {
+        display: flex;
+        border-radius: 0.5rem;
+        width: 100%;
+        max-width: 600px;
+        margin: 20px 0;
+        padding: 20px;
+        border: 1px solid $grey-500;
+        display: flex;
+        flex-direction: column;
+        background-color: $grey-100;
+      .editor-display {
+        margin-bottom: $spacing-4;
+        text-align: center;
+        h4  {
+            font-size: $font-size-sm;
+            font-weight: 600;
+            color: $grey-700;
+            text-align: left;
+            color: #058a00;
+        }
+        p {
+            text-align: left;
+            color: $grey-500;
+            font-size: $font-size-sm;
+            font-weight: 500;
+            margin-top: $spacing-1;
+        }
+        .image-container {
+            padding: 36px;
+            border-radius: 0.75rem;
+            border: 2px dashed $grey-600;
+            background-color: $grey-300;
+            max-width: 70%;
+            max-height: 200px;
+            margin-top: $spacing-7;
+            margin-bottom: $spacing-7;
+        }
+      }
+  
+      /* SCSS for customizing the range slider */
+        .slider-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 600px;
+
+            label {
+            margin: 10px 0 5px;
+            display: flex;
+            justify-content: space-between;
+            }
+        
+            input[type="range"] {
+                appearance: none;
+                width: 100%;
+                height: 8px;
+                border-radius: 5px;
+                background: #ddd;
+                outline: none;
+                opacity: 0.75;
+                transition: opacity 0.2s;
+        
+                &::-webkit-slider-thumb {
+                    -webkit-appearance: none;
+                    appearance: none;
+                    width: 15px;
+                    height: 15px;
+                    border-radius: 50%;
+                    background: $grey-700;
+                    cursor: pointer;
+            
+                    &:hover {
+                    background: #058a00;
+                    }
+                }
+
+                &::-ms-thumb {
+                    width: 25px;
+                    height: 25px;
+                    background: #0066cc;
+                    cursor: pointer;
+            
+                    &:hover {
+                    background: #005bb5;
+                    }
+                }
+            
+                &:hover {
+                    opacity: 1;
+                }
+            }
+        }
+        .download-btn {
+            font-size: $font-size-sm;
+            color: $grey-400;
+            background-color: $grey-700;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            margin-top: $spacing-5;
+            width: 35%;
+            height: 3rem;
+            border-radius: 0.25rem;
+            &:hover {
+                transition: 0.2s;
+                border: none;
+                background-color: $primary-hover;
+                color: white;
+            }
+        }
+    }
+  }
+  
